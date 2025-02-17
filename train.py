@@ -18,7 +18,10 @@ from tqdm import tqdm
 
 parser = argparse.ArgumentParser()
 parser.add_argument(
-    "-d", "--data_dir", default="data", help="directory to read LMDB files"
+    "-d",
+    "--data_dir",
+    default="data",
+    help="directory to read LMDB files",
 )
 parser.add_argument("-l", "--logdir", default="logs", help="directory to write logs")
 parser.add_argument(
@@ -27,9 +30,13 @@ parser.add_argument(
     default=None,
     help="path to restore checkpoint, e.g. ./logs/model-100.pth",
 )
-parser.add_argument("-bs", "--batch_size", default=32, type=int, help="Default 32")
+parser.add_argument("-bs", "--batch_size", default=4, type=int, help="Default 4")
 parser.add_argument(
-    "-lr", "--learning_rate", default=1e-2, type=float, help="Default 1e-2"
+    "-lr",
+    "--learning_rate",
+    default=1e-2,
+    type=float,
+    help="Default 1e-2",
 )
 parser.add_argument(
     "-p",
@@ -39,7 +46,11 @@ parser.add_argument(
     help="Default 100, set -1 to train infinitely",
 )
 parser.add_argument(
-    "-ds", "--decay_steps", default=10000, type=int, help="Default 10000"
+    "-ds",
+    "--decay_steps",
+    default=10000,
+    type=int,
+    help="Default 10000",
 )
 parser.add_argument("-dr", "--decay_rate", default=0.9, type=float, help="Default 0.9")
 
@@ -100,9 +111,9 @@ def _train(
     patience = initial_patience
     best_accuracy = 0.0
     duration = 0.0
-
     model = Model()
-    model.cuda()
+    if torch.cuda.is_available():
+        model.cuda()
 
     transform = transforms.Compose(
         [
@@ -120,7 +131,10 @@ def _train(
     )
     evaluator = Evaluator(path_to_val_lmdb_dir)
     optimizer = optim.SGD(
-        model.parameters(), lr=initial_learning_rate, momentum=0.9, weight_decay=0.0005
+        model.parameters(),
+        lr=initial_learning_rate,
+        momentum=0.9,
+        weight_decay=0.0005,
     )
     scheduler = StepLR(
         optimizer,
@@ -144,7 +158,8 @@ def _train(
 
     while True:
         for images, length_labels, digits_labels in tqdm(
-            train_loader, desc="Loading data..."
+            train_loader,
+            desc="Loading data...",
         ):
             start_time = time.time()
             images, length_labels, digits_labels = (
@@ -152,6 +167,7 @@ def _train(
                 length_labels.cuda(),
                 [digit_labels.cuda() for digit_labels in digits_labels],
             )
+
             (
                 length_logits,
                 digit1_logits,
@@ -160,6 +176,7 @@ def _train(
                 digit4_logits,
                 digit5_logits,
             ) = model.train()(images)
+
             loss = _loss(
                 length_logits,
                 digit1_logits,
@@ -177,7 +194,6 @@ def _train(
             scheduler.step()
             step += 1
             duration += time.time() - start_time
-
             if step % num_steps_to_show_loss == 0:
                 examples_per_sec = batch_size * num_steps_to_show_loss / duration
                 duration = 0.0
@@ -197,16 +213,15 @@ def _train(
 
             losses = np.append(losses, loss.item())
             np.save(path_to_losses_npy_file, losses)
-
             print("=> Evaluating on validation dataset...")
             accuracy = evaluator.evaluate(model)
             print("==> accuracy = %f, best accuracy %f" % (accuracy, best_accuracy))
-
             if accuracy > best_accuracy:
                 path_to_checkpoint_file = model.store(path_to_log_dir, step=step)
                 print("=> Model saved to file: %s" % path_to_checkpoint_file)
                 patience = initial_patience
                 best_accuracy = accuracy
+
             else:
                 patience -= 1
 
