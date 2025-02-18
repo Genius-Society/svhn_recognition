@@ -3,17 +3,17 @@ import time
 import torch
 import argparse
 import warnings
+import numpy as np
 import torch.utils.data
 import torch.nn.functional
 import torch.optim as optim
-import numpy as np
 from torch.optim.lr_scheduler import StepLR
 from torchvision import transforms
-from evaluator import Evaluator
 from datetime import datetime
+from tqdm import tqdm
+from evaluator import Evaluator
 from dataset import Dataset
 from model import Model
-from tqdm import tqdm
 
 
 parser = argparse.ArgumentParser()
