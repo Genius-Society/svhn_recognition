@@ -160,11 +160,12 @@ def _train(
             desc="Loading data...",
         ):
             start_time = time.time()
-            images, length_labels, digits_labels = (
-                images.cuda(),
-                length_labels.cuda(),
-                [digit_labels.cuda() for digit_labels in digits_labels],
-            )
+            if torch.cuda.is_available():
+                images, length_labels, digits_labels = (
+                    images.cuda(),
+                    length_labels.cuda(),
+                    [digit_labels.cuda() for digit_labels in digits_labels],
+                )
 
             (
                 length_logits,

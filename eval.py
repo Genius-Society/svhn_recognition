@@ -1,4 +1,5 @@
 import os
+import torch
 import argparse
 from model import Model
 from evaluator import Evaluator
@@ -20,7 +21,9 @@ parser.add_argument(
 def _eval(path_to_checkpoint_file, path_to_eval_lmdb_dir):
     model = Model()
     model.restore(path_to_checkpoint_file)
-    model.cuda()
+    if torch.cuda.is_available():
+        model.cuda()
+
     accuracy = Evaluator(path_to_eval_lmdb_dir).evaluate(model)
     print(
         "Evaluate %s on %s, accuracy = %f"

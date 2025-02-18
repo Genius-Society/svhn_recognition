@@ -22,11 +22,13 @@ class Evaluator(object):
         needs_include_length = False
         with torch.no_grad():
             for _, (images, length_labels, digits_labels) in enumerate(self._loader):
-                images, length_labels, digits_labels = (
-                    images.cuda(),
-                    length_labels.cuda(),
-                    [digit_labels.cuda() for digit_labels in digits_labels],
-                )
+                if torch.cuda.is_available():
+                    images, length_labels, digits_labels = (
+                        images.cuda(),
+                        length_labels.cuda(),
+                        [digit_labels.cuda() for digit_labels in digits_labels],
+                    )
+
                 (
                     length_logits,
                     digit1_logits,
@@ -44,30 +46,28 @@ class Evaluator(object):
                 digit5_prediction = digit5_logits.max(1)[1]
 
                 if needs_include_length:
-                    num_correct += (
-                        (
-                            length_prediction.eq(length_labels)
-                            & digit1_prediction.eq(digits_labels[0])
-                            & digit2_prediction.eq(digits_labels[1])
-                            & digit3_prediction.eq(digits_labels[2])
-                            & digit4_prediction.eq(digits_labels[3])
-                            & digit5_prediction.eq(digits_labels[4])
-                        )
-                        .cuda()
-                        .sum()
-                    )
+                    correct = (
+                        length_prediction.eq(length_labels)
+                        & digit1_prediction.eq(digits_labels[0])
+                        & digit2_prediction.eq(digits_labels[1])
+                        & digit3_prediction.eq(digits_labels[2])
+                        & digit4_prediction.eq(digits_labels[3])
+                        & digit5_prediction.eq(digits_labels[4])
+                    ).sum()
+
                 else:
-                    num_correct += (
-                        (
-                            digit1_prediction.eq(digits_labels[0])
-                            & digit2_prediction.eq(digits_labels[1])
-                            & digit3_prediction.eq(digits_labels[2])
-                            & digit4_prediction.eq(digits_labels[3])
-                            & digit5_prediction.eq(digits_labels[4])
-                        )
-                        .cuda()
-                        .sum()
-                    )
+                    correct = (
+                        digit1_prediction.eq(digits_labels[0])
+                        & digit2_prediction.eq(digits_labels[1])
+                        & digit3_prediction.eq(digits_labels[2])
+                        & digit4_prediction.eq(digits_labels[3])
+                        & digit5_prediction.eq(digits_labels[4])
+                    ).sum()
+
+                if torch.cuda.is_available():
+                    correct = correct.cuda()
+
+                num_correct += correct
 
         accuracy = num_correct.item() / len(self._loader.dataset)
         return accuracy
