@@ -132,12 +132,10 @@ class ExampleReader(object):
         path_to_image_file = self._path_to_image_files[self._example_pointer]
         index = int(path_to_image_file.split("\\")[-1].split(".")[0]) - 1
         self._example_pointer += 1
-
         attrs = ExampleReader._get_attrs(digit_struct_mat_file, index)
         label_of_digits = attrs["label"]
         length = len(label_of_digits)
-        if length > 5:
-            # skip this example
+        if length > 5:  # skip this example
             return self.read_and_convert(digit_struct_mat_file)
 
         digits = [10, 10, 10, 10, 10]  # digit 10 represents no digit
@@ -180,6 +178,7 @@ class ExampleReader(object):
         example.image = image
         example.length = length
         example.digits.extend(digits)
+
         return example
 
 
@@ -188,9 +187,7 @@ def convert_to_lmdb(
     path_to_lmdb_dirs,
     choose_writer_callback,
 ):
-    num_examples = []
-    writers = []
-
+    num_examples, writers = [], []
     for path_to_lmdb_dir in path_to_lmdb_dirs:
         num_examples.append(0)
         writers.append(lmdb.open(path_to_lmdb_dir, map_size=10 * 1024 * 1024 * 1024))
@@ -202,7 +199,6 @@ def convert_to_lmdb(
         path_to_image_files = glob.glob(os.path.join(path_to_dataset_dir, "*.png"))
         path_to_dataset_dir = path_to_dataset_dir.replace("\\", "/")
         total_files = len(path_to_image_files)
-
         with h5py.File(path_to_digit_struct_mat_file, "r") as digit_struct_mat_file:
             example_reader = ExampleReader(path_to_image_files)
             txns = [writer.begin(write=True) for writer in writers]
@@ -212,7 +208,6 @@ def convert_to_lmdb(
             ):
                 idx = choose_writer_callback(path_to_lmdb_dirs)
                 txn = txns[idx]
-
                 example = example_reader.read_and_convert(digit_struct_mat_file)
                 if example is None:
                     break
@@ -230,7 +225,10 @@ def convert_to_lmdb(
 
 
 def create_lmdb_meta_file(
-    num_train_examples, num_val_examples, num_test_examples, path_to_lmdb_meta_file
+    num_train_examples,
+    num_val_examples,
+    num_test_examples,
+    path_to_lmdb_meta_file,
 ):
     print("Saving meta file to %s..." % path_to_lmdb_meta_file)
     meta = Meta()
@@ -249,12 +247,10 @@ def main(args):
     path_to_test_digit_struct_mat_file = os.path.join(
         path_to_test_dir, "digitStruct.mat"
     )
-
     path_to_train_lmdb_dir = os.path.join(args.data_dir, "train.lmdb")
     path_to_val_lmdb_dir = os.path.join(args.data_dir, "val.lmdb")
     path_to_test_lmdb_dir = os.path.join(args.data_dir, "test.lmdb")
     path_to_lmdb_meta_file = os.path.join(args.data_dir, "lmdb_meta.json")
-
     for path_to_dir in [path_to_train_lmdb_dir, path_to_test_lmdb_dir]:
         assert not os.path.exists(path_to_dir), (
             "LMDB directory %s already exists" % path_to_dir
@@ -266,6 +262,7 @@ def main(args):
         [path_to_train_lmdb_dir, path_to_val_lmdb_dir],
         lambda paths: 0 if random.random() > 0.1 else 1,
     )
+
     print("Processing test data...")
     [num_test_examples] = convert_to_lmdb(
         [(path_to_test_dir, path_to_test_digit_struct_mat_file)],
