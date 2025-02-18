@@ -83,7 +83,7 @@ def _loss(
     digit5_cross_entropy = torch.nn.functional.cross_entropy(
         digit5_logits, digits_labels[4]
     )
-    loss = (
+    return (
         length_cross_entropy
         + digit1_cross_entropy
         + digit2_cross_entropy
@@ -91,8 +91,6 @@ def _loss(
         + digit4_cross_entropy
         + digit5_cross_entropy
     )
-
-    return loss
 
 
 def _train(
