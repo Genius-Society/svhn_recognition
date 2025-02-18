@@ -10,8 +10,9 @@ class Dataset(data.Dataset):
         self._path_to_lmdb_dir = path_to_lmdb_dir
         self._reader = lmdb.open(path_to_lmdb_dir, lock=False)
         with self._reader.begin() as txn:
-            self._length = txn.stat()['entries']
+            self._length = txn.stat()["entries"]
             self._keys = self._keys = [key for key, _ in txn.cursor()]
+
         self._transform = transform
 
     def __len__(self):
@@ -23,12 +24,10 @@ class Dataset(data.Dataset):
 
         example = example_pb2.Example()
         example.ParseFromString(value)
-
         image = np.frombuffer(example.image, dtype=np.uint8)
         image = image.reshape([64, 64, 3])
         image = Image.fromarray(image)
         image = self._transform(image)
-
         length = example.length
         digits = example.digits
 

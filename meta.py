@@ -8,19 +8,19 @@ class Meta(object):
         self.num_test_examples = None
 
     def save(self, path_to_json_file):
-        with open(path_to_json_file, 'w') as f:
+        with open(path_to_json_file, "w") as f:
             content = {
-                'num_examples': {
-                    'train': self.num_train_examples,
-                    'val': self.num_val_examples,
-                    'test': self.num_test_examples
+                "num_examples": {
+                    "train": self.num_train_examples,
+                    "val": self.num_val_examples,
+                    "test": self.num_test_examples,
                 }
             }
             json.dump(content, f)
 
     def load(self, path_to_json_file):
-        with open(path_to_json_file, 'r') as f:
+        with open(path_to_json_file, "r") as f:
             content = json.load(f)
-            self.num_train_examples = content['num_examples']['train']
-            self.num_val_examples = content['num_examples']['val']
-            self.num_test_examples = content['num_examples']['test']
+            self.num_train_examples = content["num_examples"]["train"]
+            self.num_val_examples = content["num_examples"]["val"]
+            self.num_test_examples = content["num_examples"]["test"]
