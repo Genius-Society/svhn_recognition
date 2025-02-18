@@ -30,7 +30,7 @@ parser.add_argument(
     default=None,
     help="path to restore checkpoint, e.g. ./logs/model-100.pth",
 )
-parser.add_argument("-bs", "--batch_size", default=4, type=int, help="Default 4")
+parser.add_argument("-bs", "--batch_size", default=32, type=int, help="Default 32")
 parser.add_argument(
     "-lr",
     "--learning_rate",
@@ -164,7 +164,7 @@ def _train(
                 images, length_labels, digits_labels = (
                     images.cuda(),
                     length_labels.cuda(),
-                    [digit_labels.cuda() for digit_labels in digits_labels],
+                    [digit_label.cuda() for digit_label in digits_labels],
                 )
 
             (

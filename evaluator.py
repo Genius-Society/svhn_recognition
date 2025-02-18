@@ -21,12 +21,12 @@ class Evaluator(object):
         num_correct = 0
         needs_include_length = False
         with torch.no_grad():
-            for _, (images, length_labels, digits_labels) in enumerate(self._loader):
+            for images, length_labels, digits_labels in self._loader:
                 if torch.cuda.is_available():
                     images, length_labels, digits_labels = (
                         images.cuda(),
                         length_labels.cuda(),
-                        [digit_labels.cuda() for digit_labels in digits_labels],
+                        [digit_label.cuda() for digit_label in digits_labels],
                     )
 
                 (
