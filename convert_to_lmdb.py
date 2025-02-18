@@ -238,7 +238,7 @@ def create_lmdb_meta_file(
     meta.save(path_to_lmdb_meta_file)
 
 
-def main(args):
+def data_processor(args):
     path_to_train_dir = os.path.join(args.data_dir, "train")
     path_to_test_dir = os.path.join(args.data_dir, "test")
     path_to_train_digit_struct_mat_file = os.path.join(
@@ -271,29 +271,38 @@ def main(args):
     )
 
     create_lmdb_meta_file(
-        num_train_examples, num_val_examples, num_test_examples, path_to_lmdb_meta_file
+        num_train_examples,
+        num_val_examples,
+        num_test_examples,
+        path_to_lmdb_meta_file,
     )
 
     print("Done")
 
 
-if __name__ == "__main__":
-    if os.path.exists("./data/train.lmdb"):
-        shutil.rmtree("./data/train.lmdb")
+def process_data(force_clean=False):
+    if force_clean:
+        if os.path.exists("./data/train.lmdb"):
+            shutil.rmtree("./data/train.lmdb")
 
-    if os.path.exists("./data/val.lmdb"):
-        shutil.rmtree("./data/val.lmdb")
+        if os.path.exists("./data/val.lmdb"):
+            shutil.rmtree("./data/val.lmdb")
 
-    if os.path.exists("./data/test.lmdb"):
-        shutil.rmtree("./data/test.lmdb")
+        if os.path.exists("./data/test.lmdb"):
+            shutil.rmtree("./data/test.lmdb")
 
     if not os.path.exists("./data.zip"):
         download_file(
-            "https://huggingface.co/datasets/Genius-Society/svhn/resolve/main/data.zip",
+            "https://huggingface.co/datasets/Genius-Society/svhn/resolve/main/data/svhn.zip",
             "data.zip",
         )
 
     if not os.path.exists("./data"):
         unzip("data.zip", "./")
 
-    main(parser.parse_args())
+    if not os.path.exists("./data/train.lmdb"):
+        data_processor(parser.parse_args())
+
+
+if __name__ == "__main__":
+    process_data(True)

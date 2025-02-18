@@ -11,9 +11,10 @@ from torch.optim.lr_scheduler import StepLR
 from torchvision import transforms
 from datetime import datetime
 from tqdm import tqdm
-from evaluator import Evaluator
-from dataset import Dataset
 from model import Model
+from dataset import Dataset
+from evaluator import Evaluator
+from convert_to_lmdb import process_data
 
 
 parser = argparse.ArgumentParser()
@@ -258,4 +259,5 @@ def main(args):
 
 if __name__ == "__main__":
     warnings.filterwarnings("ignore")
+    process_data()
     main(parser.parse_args())

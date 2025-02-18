@@ -22,8 +22,7 @@ pip install -r requirements.txt
 git clone git@github.com:Genius-Society/svhn_recognition.git
 cd svhn_recognition
 ```
-2. Run `convert_to_lmdb.py`
-3. Run `train.py`
+2. Run `python train.py`
 
 ## Dataset
 [Street View House Number](http://ufldl.stanford.edu/housenumbers/SVHN) Dateset 来源于谷歌街景门牌号码
