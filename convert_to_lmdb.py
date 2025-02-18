@@ -25,7 +25,7 @@ parser.add_argument(
 def download_file(
     url,
     save_path,
-    backup_url="https://www.modelscope.cn/api/v1/datasets/Genius-Society/svhn/repo?Revision=master&FilePath=data.zip",
+    backup_url="https://www.modelscope.cn/datasets/Genius-Society/svhn/resolve/master/data/svhn.zip",
 ):
     try:
         # 发起 GET 请求下载文件

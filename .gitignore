@@ -4,5 +4,6 @@
 data/*
 logs/*
 rename.sh
-data.zip
-test.py
+*.zip
+test.*
+*__pycache__*
