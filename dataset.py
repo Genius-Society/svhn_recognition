@@ -29,6 +29,6 @@ class Dataset(data.Dataset):
         image = Image.fromarray(image)
         image = self._transform(image)
         length = example.length
-        digits = example.digits
+        digits = list(example.digits)
 
         return image, length, digits
