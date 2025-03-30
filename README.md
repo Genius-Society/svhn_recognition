@@ -1,5 +1,5 @@
 # SVHN Recognition
-[![license](https://img.shields.io/github/license/Genius-Society/svhn_recognition.svg)](https://github.com/Genius-Society/svhn_recognition/blob/master/LICENSE)
+[![license](https://img.shields.io/github/license/Genius-Society/svhn_recognition.svg)](https://github.com/Genius-Society/svhn_recognition/blob/main/LICENSE)
 [![hf](https://img.shields.io/badge/HuggingFace-SVHN-ffd21e.svg)](https://huggingface.co/collections/Genius-Society/svhn-67bc30924b9d3615a6df0b3b)
 [![ms](https://img.shields.io/badge/ModelScope-SVHN-624aff.svg)](https://www.modelscope.cn/collections/SVHN-68df87fc64904a)
 
