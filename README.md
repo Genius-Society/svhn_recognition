@@ -1,4 +1,4 @@
-# svhn_recognition
+# SVHN Recognition
 [![license](https://img.shields.io/github/license/Genius-Society/svhn_recognition.svg)](https://github.com/Genius-Society/svhn_recognition/blob/master/LICENSE)
 [![hf](https://img.shields.io/badge/HuggingFace-SVHN-ffd21e.svg)](https://huggingface.co/collections/Genius-Society/svhn-67bc30924b9d3615a6df0b3b)
 [![ms](https://img.shields.io/badge/ModelScope-SVHN-624aff.svg)](https://www.modelscope.cn/collections/SVHN-68df87fc64904a)
@@ -6,27 +6,30 @@
 This project is a PyTorch implementation that uses deep CNN to recognize multi-digit numbers using the SVHN dataset derived from Google Street View house numbers (SVHN), each picture contains a set of numbers from 0 to 9, the model is tested to have 89% accuracy.
 
 ## Original dataset
-[Street View House Number](http://ufldl.stanford.edu/housenumbers/SVHN) Dateset 来源于谷歌街景门牌号码
-
-本次任务的原始数据集是其中的 Format 1 (Full Numbers: _train.tar.gz_, _test.tar.gz_ , _extra.tar.gz_)
-
-其中, _train.tar.gz_ 为训练数据集, _test.tar.gz_ 为测试数据集。注: _extra.tar.gz_ 是附加数据集, 建议不使用。
-
-在 _train.tar.gz_ 与 _test.tar.gz_ 中，分别包含：<br>
-1) 一些 .png 格式的图片，每张图片包含一个门牌号；<br>
-2) 一个 _digitStruct.mat_ 文件，包含每张图片所对应的门牌号，以及每个门牌号数字的位置信息；<br>
-3) 一个 _see\_bboxes.m_ 文件，用于辅助 Matlab 环境下的处理，请忽略之。
+[Street View House Number](http://ufldl.stanford.edu/housenumbers/SVHN) Dateset, sourced from Google Street View house numbers, is provided in Format 1 (Full Numbers), which includes three compressed files: _train.tar.gz_, _test.tar.gz_, and _extra.tar.gz_. Here, _train.tar.gz_ constitutes the training dataset, while _test.tar.gz_ serves as the testing dataset. It is important to note that _extra.tar.gz_ is an additional dataset that is not recommended for use. Within both _train.tar.gz_ and _test.tar.gz_, the following components are included:
+1. A collection of PNG images, each depicting a house number.
+2. A file named _digitStruct.mat_, which contains the house number corresponding to each image along with the positional information for each individual digit.
+3. A file named _see_bboxes.m_, provided solely as an auxiliary tool for processing within the Matlab environment, which can be disregarded.
 
 ## Tasks
-1. 设计一个网络，用 _train.tar.gz_ 中的数据进行训练，并用 _test.tar.gz_ 中的数据进行测试；
-2. 在测试的过程中，不允许使用 _test.tar.gz/digitStruct.mat_ 文件中的位置信息作为输入，即必须在“忽略测试数据集中给出的位置信息”的前提下，识别出 _test.tar.gz_ 中每张图片中的门牌号；
-3. 撰写一份报告，包含如下信息：<br>
-    (1) 所设计的网络的结构和超参数信息；<br>
-    (2) 网络的训练方法和优化方法；<br>
-    (3) 体现训练过程的“训练曲线”；<br>
-    (4) 识别准确率；
+### Network Design and Training
+Develop a neural network that is trained using the data provided in _train.tar.gz_ and subsequently evaluated on the data contained in _test.tar.gz_.
+
+### Testing Constraints
+During the testing phase, the positional information contained within the _test.tar.gz/digitStruct.mat_ file must not be used as input. The network must be capable of accurately recognizing the house number in each test image without relying on the provided positional metadata.
+
+### Report Submission
+Prepare a comprehensive report that includes:
+- A detailed description of the network architecture and the hyperparameters employed.
+- An explanation of the training methodology and the optimization techniques used.
+- Training curves that illustrate the progression of the training process.
+- The recognition accuracy achieved on the testing dataset.
+
+This formulation is intended to guide the development and evaluation of a system for automated recognition of house numbers using the SVHN dataset under the specified constraints.
 
 # Report
+The report docs are [here](./docs).
+
 ## Environment
 ```bash
 conda create -n py311 python=3.11 -y
