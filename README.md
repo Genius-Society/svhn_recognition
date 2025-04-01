@@ -46,28 +46,9 @@ cd svhn_recognition
 2. Run `python train.py`
 
 ## Params
-<table>
-    <tr>
-        <th>Steps</th>
-        <th>GPU</th>
-        <th>Batch Size</th>
-        <th>Learning Rate</th>
-        <th>Patience</th>
-        <th>Decay Step</th>
-        <th>Decay Rate</th>
-        <th>Accuracy</th>
-    </tr>
-    <tr>
-        <td>122000</td>
-        <td>GTX 1080 Ti</td>
-        <td>512</td>
-        <td>0.01</td>
-        <td>100</td>
-        <td>625</td>
-        <td>0.9</td>
-        <td>89.21%</td>
-    </tr>
-</table>
+| Steps  |     GPU     | Batch size | Learning rate | Patience | Decay step | Decay rate | Accuracy |
+| :----: | :---------: | :--------: | :-----------: | :------: | :--------: | :--------: | :------: |
+| 122000 | GTX 1080 Ti |    512     |     0.01      |   100    |    625     |    0.9     |  89.21%  |
 
 ## Training curve
 ![](./docs/loss.png)
