@@ -22,13 +22,8 @@ parser.add_argument(
 )
 
 
-def download_file(
-    url,
-    save_path,
-    backup_url="https://www.modelscope.cn/datasets/Genius-Society/svhn/resolve/master/data/svhn.zip",
-):
-    try:
-        # 发起 GET 请求下载文件
+def download_file(url: str, save_path: str):
+    try:  # 发起 GET 请求下载文件
         response = requests.get(url, stream=True)
         # 检查请求是否成功
         response.raise_for_status()
@@ -49,9 +44,9 @@ def download_file(
 
         print(f"File has been successfully downloaded and saved to '{save_path}'.")
 
-    except requests.exceptions.RequestException as e:
-        print(f"Error: {e}")
-        download_file(backup_url, save_path)
+    except Exception as e:
+        print(f"Error: {e}, retrying...")
+        download_file(url, save_path)
 
 
 def unzip(zip_file_path, extract_to):
@@ -293,7 +288,7 @@ def process_data(force_clean=False):
 
     if not os.path.exists("./data.zip"):
         download_file(
-            "https://huggingface.co/datasets/Genius-Society/svhn/resolve/main/data/svhn.zip",
+            "https://www.modelscope.cn/datasets/Genius-Society/svhn/resolve/master/data/svhn.zip",
             "data.zip",
         )
 
