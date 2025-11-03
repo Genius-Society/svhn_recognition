@@ -28,12 +28,12 @@ cd svhn_recognition
 
 ## Original dataset
 [Street View House Number](http://ufldl.stanford.edu/housenumbers/SVHN) Dateset, sourced from Google Street View house numbers, is provided in Format 1 (Full Numbers), which includes three compressed files: _train.tar.gz_, _test.tar.gz_, and _extra.tar.gz_. Here, _train.tar.gz_ constitutes the training dataset, while _test.tar.gz_ serves as the testing dataset. It is important to note that _extra.tar.gz_ is an additional dataset that is not recommended for use. Within both _train.tar.gz_ and _test.tar.gz_, the following components are included:
-1. A collection of PNG images, each depicting a house number.
-2. A file named _digitStruct.mat_, which contains the house number corresponding to each image along with the positional information for each individual digit.
-3. A file named _see_bboxes.m_, provided solely as an auxiliary tool for processing within the Matlab environment, which can be disregarded.
+ - A collection of PNG images, each depicting a house number.
+ - A file named _digitStruct.mat_, which contains the house number corresponding to each image along with the positional information for each individual digit.
+ - A file named _see_bboxes.m_, provided solely as an auxiliary tool for processing within the Matlab environment, which can be disregarded.
 
 ## Tasks
-### Network Design and Training
+### Network Design & Training
 Develop a neural network that is trained using the data provided in _train.tar.gz_ and subsequently evaluated on the data contained in _test.tar.gz_.
 
 ### Testing Constraints
