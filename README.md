@@ -53,5 +53,5 @@ cd svhn_recognition
 ## Training curve
 ![](./docs/loss.png)
 
-## Reference
+## Thanks
 - [Multi-digit Number Recognition from Street View Imagery using Deep Convolutional Neural Networks](http://arxiv.org/pdf/1312.6082.pdf)
