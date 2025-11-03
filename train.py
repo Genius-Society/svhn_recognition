@@ -21,7 +21,7 @@ parser = argparse.ArgumentParser()
 parser.add_argument(
     "-d",
     "--data_dir",
-    default="data",
+    default="./__pycache__/data",
     help="directory to read LMDB files",
 )
 parser.add_argument("-l", "--logdir", default="logs", help="directory to write logs")

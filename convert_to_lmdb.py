@@ -13,11 +13,12 @@ from tqdm import tqdm
 from PIL import Image
 from meta import Meta
 
+
 parser = argparse.ArgumentParser()
 parser.add_argument(
     "-d",
     "--data_dir",
-    default="./data",
+    default="./__pycache__/data",
     help="directory to SVHN (format 1) folders and write the converted files",
 )
 
@@ -49,26 +50,22 @@ def download_file(url: str, save_path: str):
         download_file(url, save_path)
 
 
-def unzip(zip_file_path, extract_to):
-    try:
-        # 打开 ZIP 文件
-        with zipfile.ZipFile(zip_file_path, "r") as zip_ref:
+def unzip(archive, extracto):
+    try:  # 打开 ZIP 文件
+        with zipfile.ZipFile(archive, "r") as zip_ref:
             # 获取ZIP文件内的文件数量
             num_files = len(zip_ref.infolist())
             # 使用 tqdm 显示解压缩进度条
             with tqdm(
                 total=num_files,
                 unit="file",
-                desc=f"Extracting {zip_file_path} to {extract_to}...",
-            ) as pbar:
-                # 逐个解压文件
+                desc=f"Extracting {archive} to {extracto}...",
+            ) as pbar:  # 逐个解压文件
                 for member in zip_ref.infolist():
-                    zip_ref.extract(member, extract_to)
+                    zip_ref.extract(member, extracto)
                     pbar.update(1)
 
-        print(
-            f"ZIP file '{zip_file_path}' has been successfully extracted to '{extract_to}'."
-        )
+        print(f"ZIP file '{archive}' has been successfully extracted to '{extracto}'.")
 
     except Exception as e:
         print(f"Error: {e}")
@@ -255,14 +252,14 @@ def data_processor(args):
     [num_train_examples, num_val_examples] = convert_to_lmdb(
         [(path_to_train_dir, path_to_train_digit_struct_mat_file)],
         [path_to_train_lmdb_dir, path_to_val_lmdb_dir],
-        lambda paths: 0 if random.random() > 0.1 else 1,
+        lambda _: 0 if random.random() > 0.1 else 1,
     )
 
     print("Processing test data...")
     [num_test_examples] = convert_to_lmdb(
         [(path_to_test_dir, path_to_test_digit_struct_mat_file)],
         [path_to_test_lmdb_dir],
-        lambda paths: 0,
+        lambda _: 0,
     )
 
     create_lmdb_meta_file(
@@ -275,27 +272,28 @@ def data_processor(args):
     print("Done")
 
 
-def process_data(force_clean=False):
+def process_data(force_clean=False, cache_dir="./__pycache__"):
+    os.makedirs(cache_dir, exist_ok=True)
     if force_clean:
-        if os.path.exists("./data/train.lmdb"):
-            shutil.rmtree("./data/train.lmdb")
+        if os.path.exists(f"{cache_dir}/data/train.lmdb"):
+            shutil.rmtree(f"{cache_dir}/data/train.lmdb")
 
-        if os.path.exists("./data/val.lmdb"):
-            shutil.rmtree("./data/val.lmdb")
+        if os.path.exists(f"{cache_dir}/data/val.lmdb"):
+            shutil.rmtree(f"{cache_dir}/data/val.lmdb")
 
-        if os.path.exists("./data/test.lmdb"):
-            shutil.rmtree("./data/test.lmdb")
+        if os.path.exists(f"{cache_dir}/data/test.lmdb"):
+            shutil.rmtree(f"{cache_dir}/data/test.lmdb")
 
-    if not os.path.exists("./data.zip"):
+    if not os.path.exists(f"{cache_dir}/data.zip"):
         download_file(
             "https://www.modelscope.cn/datasets/Genius-Society/svhn/resolve/master/data/svhn.zip",
-            "data.zip",
+            f"{cache_dir}/data.zip",
         )
 
-    if not os.path.exists("./data"):
-        unzip("data.zip", "./")
+    if not os.path.exists(f"{cache_dir}/data"):
+        unzip(f"{cache_dir}/data.zip", cache_dir)
 
-    if not os.path.exists("./data/train.lmdb"):
+    if not os.path.exists(f"{cache_dir}/data/train.lmdb"):
         data_processor(parser.parse_args())
 
 
