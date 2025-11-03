@@ -6,6 +6,26 @@
 
 This project is a PyTorch implementation that uses deep CNN to recognize multi-digit numbers using the SVHN dataset derived from Google Street View house numbers (SVHN), each picture contains a set of numbers from 0 to 9, the model is tested to have 89% accuracy.
 
+## Environment
+```bash
+conda create -n py311 python=3.11 -y
+conda activate py311
+pip install -r requirements.txt
+```
+
+### Params
+| Steps  |     GPU     | Batch size | Learning rate | Patience | Decay step | Decay rate | Accuracy |
+| :----: | :---------: | :--------: | :-----------: | :------: | :--------: | :--------: | :------: |
+| 122000 | GTX 1080 Ti |    512     |     0.01      |   100    |    625     |    0.9     |  89.21%  |
+
+## Usage
+1. Clone the source code:
+```bash
+git clone git@github.com:Genius-Society/svhn_recognition.git
+cd svhn_recognition
+```
+2. Run `python train.py`
+
 ## Original dataset
 [Street View House Number](http://ufldl.stanford.edu/housenumbers/SVHN) Dateset, sourced from Google Street View house numbers, is provided in Format 1 (Full Numbers), which includes three compressed files: _train.tar.gz_, _test.tar.gz_, and _extra.tar.gz_. Here, _train.tar.gz_ constitutes the training dataset, while _test.tar.gz_ serves as the testing dataset. It is important to note that _extra.tar.gz_ is an additional dataset that is not recommended for use. Within both _train.tar.gz_ and _test.tar.gz_, the following components are included:
 1. A collection of PNG images, each depicting a house number.
@@ -28,30 +48,10 @@ Prepare a comprehensive report that includes:
 
 This formulation is intended to guide the development and evaluation of a system for automated recognition of house numbers using the SVHN dataset under the specified constraints.
 
-# Report
+## Report
 The report docs are [here](./docs).
 
-## Environment
-```bash
-conda create -n py311 python=3.11 -y
-conda activate py311
-pip install -r requirements.txt
-```
-
-## Usage
-1. Clone the source code:
-```bash
-git clone git@github.com:Genius-Society/svhn_recognition.git
-cd svhn_recognition
-```
-2. Run `python train.py`
-
-## Params
-| Steps  |     GPU     | Batch size | Learning rate | Patience | Decay step | Decay rate | Accuracy |
-| :----: | :---------: | :--------: | :-----------: | :------: | :--------: | :--------: | :------: |
-| 122000 | GTX 1080 Ti |    512     |     0.01      |   100    |    625     |    0.9     |  89.21%  |
-
-## Training curve
+### Training curve
 ![](./docs/loss.png)
 
 ## Thanks
